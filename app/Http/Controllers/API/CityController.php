@@ -16,7 +16,7 @@ class CityController extends Controller
      */
     public function index()
     {
-        return CityResource::collection(City::all()->paginate(25));
+        return CityResource::collection(City::paginate(25));
     }
 
     /**
@@ -53,11 +53,11 @@ class CityController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, City $city)
     {
-        if (isset($request->name)) {
-            City::find($id)->
-        }
+        $city->update($request->only(['name']));
+
+        return new CityResource($city);
     }
 
     /**
@@ -66,8 +66,10 @@ class CityController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(City $city)
     {
-        //
+        $city->delete();
+
+        return response()->json(null, 204);
     }
 }
