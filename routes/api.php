@@ -21,4 +21,7 @@ Route::middleware('auth:api')->group(function() {
     Route::apiResources([
         'cities' => 'API\CityController'
     ]);
+    Route::apiResources([
+        'categories' => 'API\CategoryController'
+    ]);
 });
