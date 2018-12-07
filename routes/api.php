@@ -20,14 +20,9 @@ Route::middleware('auth:api')->group(function() {
     });
 
     Route::apiResources([
-        'cities' => 'API\CityController'
-    ]);
-
-    Route::apiResources([
-        'categories' => 'API\CategoryController'
-    ]);
-
-    Route::apiResources([
-        'restaurants' => 'API\RestaurantController'
+        'cities' => 'API\CityController',
+        'categories' => 'API\CategoryController',
+        'restaurants' => 'API\RestaurantController',
+        'menus' => 'API\MenuController'
     ]);
 });
