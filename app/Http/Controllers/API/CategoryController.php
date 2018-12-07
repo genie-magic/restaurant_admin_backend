@@ -17,7 +17,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return CategoryResource::collection(Category::paginate(25));
+        return CategoryResource::collection(Category::all());
     }
 
     /**
@@ -75,6 +75,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        // Remove n to n relationship with restaurants
+        $category->restaurants()->detach();
+
         $category->delete();
 
         return response()->json(null, 204);

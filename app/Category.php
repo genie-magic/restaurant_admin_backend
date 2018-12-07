@@ -12,4 +12,8 @@ class Category extends Model
     public function city() {
         return $this->belongsTo(City::class);
     }
+
+    public function restaurants() {
+        return $this->belongsToMany(Restaurant::class);
+    }
 }
