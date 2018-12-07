@@ -116,8 +116,6 @@ class CityController extends Controller
                 $image_url = Storage::url('public/cities/'.$fileNameToStore);
             }
 
-
-            // $image_url = $request->file('file')->storeAs('public/cities', $fileNameToStore);
         }
 
         $city->update([
