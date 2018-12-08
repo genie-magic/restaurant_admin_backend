@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\City;
 use App\Category;
+use App\Item;
 use App\Restaurant;
 use App\Menu;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('category', Category::class);
         Route::model('restaurant', Restaurant::class);
         Route::model('menu', Menu::class);
+        Route::model('item', Item::class);
     }
 
     /**

@@ -23,6 +23,7 @@ Route::middleware('auth:api')->group(function() {
         'cities' => 'API\CityController',
         'categories' => 'API\CategoryController',
         'restaurants' => 'API\RestaurantController',
-        'menus' => 'API\MenuController'
+        'menus' => 'API\MenuController',
+        'items' => 'API\ItemController'
     ]);
 });
