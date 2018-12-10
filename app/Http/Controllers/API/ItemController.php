@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Item;
+use App\Menu;
 use App\Http\Resources\Item as ItemResource;
+use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
@@ -29,7 +31,8 @@ class ItemController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'price' => 'required|integer'
+            'price' => 'required|integer',
+            'menu_id' => 'required'
         ]);
 
         // If file is set then validate file name and file type
@@ -53,15 +56,23 @@ class ItemController extends Controller
                 // Filename to store
                 $fileNameToStore = $filename.'_'.time().'.'.$extension;
                 // Upload Image
-                Storage::disk('local')->put('public/restaurants/'.$fileNameToStore, $data);
-                $image_url = Storage::url('public/restaurants/'.$fileNameToStore);
+                Storage::disk('local')->put('public/items/'.$fileNameToStore, $data);
+                $image_url = Storage::url('public/items/'.$fileNameToStore);
             }
+        }
+
+        // Can't find associated menu id
+        if (Menu::find($request->menu_id) === null) {
+            return response()->toJson([
+                'message' => 'Menu not found',
+            ], 404);
         }
 
         $item = Item::create([
             'name' => $request->name,
             'price' => $request->price,
-            'image_url' => $request->image_url
+            'image_url' => $image_url,
+            'menu_id' => $request->menu_id
         ]);
 
         return new ItemResource($item);
@@ -89,7 +100,8 @@ class ItemController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'price' => 'required|integer'
+            'price' => 'required|integer',
+            'menu_id' => 'required'
         ]);
 
         if ($request->filled('file')) {
@@ -117,12 +129,14 @@ class ItemController extends Controller
             $item->update([
                 'name' => $request->name,
                 'price' => $request->price,
-                'image_url' => $image_url
+                'image_url' => $image_url,
+                'menu_id' => $request->menu_id
             ]);
         } else {
             $item->update([
                 'name' => $request->name,
-                'price' => $request->price
+                'price' => $request->price,
+                'menu_id' => $request->menu_id
             ]);
         }
 
