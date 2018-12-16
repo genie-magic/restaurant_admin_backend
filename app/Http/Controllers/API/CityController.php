@@ -100,8 +100,9 @@ class CityController extends Controller
             ]);
         }
 
-        $image_url = null;
+
         if($request->has('file')) {
+            $image_url = null;
             $file = $request->file;
             if (preg_match('/^data:image\/(\w+);base64,/', $file)) {
                 $data = substr($file, strpos($file, ',') + 1);
@@ -115,13 +116,15 @@ class CityController extends Controller
                 Storage::disk('local')->put('public/cities/'.$fileNameToStore, $data);
                 $image_url = Storage::url('public/cities/'.$fileNameToStore);
             }
-
+            $city->update([
+                'name' => $request->name,
+                'image_url' => $image_url
+            ]);
+        } else {
+            $city->update([
+                'name' => $request->name,
+            ]);
         }
-
-        $city->update([
-            'name' => $request->name,
-            'image_url' => $image_url
-        ]);
 
         return new CityResource($city);
     }

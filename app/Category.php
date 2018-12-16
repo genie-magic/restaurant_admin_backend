@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = ['city_id', 'name'];
+    protected $fillable = ['city_id', 'name', 'image_url'];
 
     public function city() {
         return $this->belongsTo(City::class);

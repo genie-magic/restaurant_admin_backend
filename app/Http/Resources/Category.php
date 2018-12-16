@@ -21,6 +21,7 @@ class Category extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'city' => new CityResource(City::find($this->city_id)),
+            'image_url' => $this->image_url,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];
