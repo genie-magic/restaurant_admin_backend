@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Menu;
 use App\Http\Resources\Menu as MenuResource;
+use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
@@ -28,11 +29,43 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'restaurant_id' => 'required'
         ]);
 
+
+        // If file is set then validate file name and file type
+        if ($request->filled('file')){
+            $request->validate([
+                'file_name' => 'required',
+                'file_type'=> 'required'
+            ]);
+        }
+
+        $image_url = null;
+
+        if($request->has('file')) {
+            // Get file name with extensions
+
+            $file = $request->file;
+            if (preg_match('/^data:image\/(\w+);base64,/', $file)) {
+                $data = substr($file, strpos($file, ',') + 1);
+                $data = base64_decode($data);
+                $file_type = $request->file_type;
+                $extension = explode("/", $file_type)[1];
+                $filename = $request->file_name;
+                // Filename to store
+                $fileNameToStore = $filename.'_'.time().'.'.$extension;
+                // Upload Image
+                Storage::disk('local')->put('public/menus/'.$fileNameToStore, $data);
+                $image_url = Storage::url('public/menus/'.$fileNameToStore);
+            }
+        }
+
         $menu = Menu::create([
-            'name' => $request->name
+            'name' => $request->name,
+            'restaurant_id' => $request->restaurant_id,
+            'image_url' => $image_url
         ]);
 
         return new MenuResource($menu);
@@ -59,12 +92,44 @@ class MenuController extends Controller
     public function update(Request $request, Menu $menu)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'restaurant_id' => 'required'
         ]);
 
-        $menu->update([
-            'name' => $request->name
-        ]);
+        // If file is set then validate file name and file type
+        if ($request->filled('file')){
+            $request->validate([
+                'file_name' => 'required',
+                'file_type'=> 'required'
+            ]);
+        }
+
+        if($request->has('file')) {
+            $image_url = null;
+            $file = $request->file;
+            if (preg_match('/^data:image\/(\w+);base64,/', $file)) {
+                $data = substr($file, strpos($file, ',') + 1);
+                $data = base64_decode($data);
+                $file_type = $request->file_type;
+                $extension = explode("/", $file_type)[1];
+                $filename = $request->file_name;
+                // Filename to store
+                $fileNameToStore = $filename.'_'.time().'.'.$extension;
+                // Upload Image
+                Storage::disk('local')->put('public/cities/'.$fileNameToStore, $data);
+                $image_url = Storage::url('public/cities/'.$fileNameToStore);
+            }
+            $menu->update([
+                'name' => $request->name,
+                'restaurant_id' => $request->restaurant_id,
+                'image_url' => $image_url
+            ]);
+        } else {
+            $menu->update([
+                'name' => $request->name,
+                'restaurant_id' => $request->restaurant_id
+            ]);
+        }
 
         return new MenuResource($menu);
     }

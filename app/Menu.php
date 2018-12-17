@@ -2,12 +2,11 @@
 
 namespace App;
 
-use App\Item;
 use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'restaurant_id', 'menu_id', 'image_url'];
 
     public function items() {
         return $this->hasMany(Item::class);
