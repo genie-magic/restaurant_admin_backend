@@ -16,9 +16,17 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return CategoryResource::collection(Category::all());
+        $request->validate([
+            'perPage' => 'integer'
+        ]);
+
+        if ($request->has('perPage')) {
+            return CategoryResource::collection(Category::paginate($request->perPage));
+        } else {
+            return CategoryResource::collection(Category::all());
+        }
     }
 
     /**

@@ -15,9 +15,17 @@ class CityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return CityResource::collection(City::paginate(25));
+        $request->validate([
+            'perPage' => 'integer'
+        ]);
+
+        if ($request->has('perPage')) {
+            return CityResource::collection(City::paginate($request->perPage));
+        } else {
+            return CityResource::collection(City::all());
+        }
     }
 
     /**

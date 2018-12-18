@@ -16,9 +16,17 @@ class ItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return ItemResource::collection(Item::all());
+        $request->validate([
+            'perPage' => 'integer'
+        ]);
+
+        if ($request->has('perPage')) {
+            return ItemResource::collection(Item::paginate($request->perPage));
+        } else {
+            return ItemResource::collection(Item::all());
+        }
     }
 
     /**

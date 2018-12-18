@@ -16,9 +16,17 @@ class RestaurantController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return RestaurantResource::collection(Restaurant::all());
+        $request->validate([
+            'perPage' => 'integer'
+        ]);
+
+        if ($request->has('perPage')) {
+            return RestaurantResource::collection(Restaurant::paginate($request->perPage));
+        } else {
+            return RestaurantResource::collection(Restaurant::all());
+        }
     }
 
     /**
