@@ -19,13 +19,32 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'perPage' => 'integer'
+            'perPage' => 'integer',
+            'menu' => 'integer'
         ]);
 
-        if ($request->has('perPage')) {
-            return ItemResource::collection(Item::paginate($request->perPage));
+        $query = Item::query();
+
+        // If 'item_name' search is set
+        if ($request->has('item_name')) {
+            $query = $query->where('name', 'LIKE', '%'.$request->item_name.'%');
+        }
+
+        // If 'menu' search required
+        if ($request->has('menu')) {
+            $query = $query->whereHas('menu', function($q) use($request) {
+                $q->where('id', '=', $request->menu);
+            });
+        }
+
+        if ($request->has('page')) {
+            $perPage = 5;
+            if ($request->has('perPage')) {
+                $perPage = $request->perPage;
+            }
+            return ItemResource::collection($query->paginate($perPage));
         } else {
-            return ItemResource::collection(Item::all());
+            return ItemResource::collection($query->get());
         }
     }
 

@@ -18,13 +18,32 @@ class MenuController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'perPage' => 'integer'
+            'perPage' => 'integer',
+            'restaurant' => 'integer'
         ]);
 
-        if ($request->has('perPage')) {
-            return MenuResource::collection(Menu::paginate($request->perPage));
+        $query = Menu::query();
+
+        // if 'menu name' search is set
+        if ($request->has('menu_name')) {
+            $query = $query->where('name', 'LIKE', '%'.$request->menu_name.'%');
+        }
+
+        // If 'restaurant' search required
+        if ($request->has('restaurant')) {
+            $query = $query->whereHas('restaurant', function($q) use($request) {
+                $q->where('id', '=', $request->restaurant);
+            });
+        }
+
+        if ($request->has('page')) {
+            $perPage = 5;
+            if ($request->has('perPage')) {
+                $perPage = $request->perPage;
+            }
+            return MenuResource::collection($query->paginate($perPage));
         } else {
-            return MenuResource::collection(Menu::all());
+            return MenuResource::collection($query->get());
         }
     }
 

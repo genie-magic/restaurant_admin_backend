@@ -19,13 +19,39 @@ class RestaurantController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'perPage' => 'integer'
+            'perPage' => 'integer',
+            'city' => 'integer',
         ]);
 
-        if ($request->has('perPage')) {
-            return RestaurantResource::collection(Restaurant::paginate($request->perPage));
+        $query = Restaurant::query();
+
+        // if restaurant_name is selected
+        if ($request->has('restaurant_name')) {
+            $query = $query->where('name', 'LIKE', '%'.$request->restaurant_name.'%');
+        }
+
+        // If city query is selected
+        if ($request->has('city')) {
+            $query = $query->whereHas('categories.city', function($q) use($request){
+                $q->where('cities.id', '=', $request->city);
+            });
+        }
+
+        // If category query is selected
+        if ($request->has('category')) {
+            $query = $query->whereHas('categories', function ($q) use($request) {
+                $q->where('categories.id', '=', $request->category);
+            });
+        }
+
+        if ($request->has('page')) {
+            $perPage = 5;
+            if ($request->has('perPage')) {
+                $perPage = $request->perPage;
+            }
+            return RestaurantResource::collection($query->paginate($perPage));
         } else {
-            return RestaurantResource::collection(Restaurant::all());
+            return RestaurantResource::collection($query->get());
         }
     }
 

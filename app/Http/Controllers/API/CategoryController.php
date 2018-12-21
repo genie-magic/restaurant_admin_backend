@@ -22,10 +22,21 @@ class CategoryController extends Controller
             'perPage' => 'integer'
         ]);
 
-        if ($request->has('perPage')) {
-            return CategoryResource::collection(Category::paginate($request->perPage));
+        $query = Category::query();
+
+        // If category_name search is set
+        if ($request->has('category_name')) {
+            $query = $query->where('name', 'LIKE', '%'.$request->category_name.'%');
+        }
+
+        if ($request->has('page')) {
+            $perPage = 5;
+            if ($request->has('perPage')) {
+                $perPage = $request->perPage;
+            }
+            return CategoryResource::collection($query->paginate($perPage));
         } else {
-            return CategoryResource::collection(Category::all());
+            return CategoryResource::collection($query->get());
         }
     }
 

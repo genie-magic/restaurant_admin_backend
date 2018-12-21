@@ -21,10 +21,21 @@ class CityController extends Controller
             'perPage' => 'integer'
         ]);
 
-        if ($request->has('perPage')) {
-            return CityResource::collection(City::paginate($request->perPage));
+        $query = City::query();
+
+        // If city_name search is set
+        if ($request->has('city_name')) {
+            $query = $query->where('name', 'LIKE', '%'.$request->city_name.'%');
+        }
+
+        if ($request->has('page')) {
+            $perPage = 5;
+            if ($request->has('perPage')) {
+                $perPage = $request->perPage;
+            }
+            return CityResource::collection($query->paginate($perPage));
         } else {
-            return CityResource::collection(City::all());
+            return CityResource::collection($query->get());
         }
     }
 
