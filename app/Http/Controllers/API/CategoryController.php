@@ -29,6 +29,13 @@ class CategoryController extends Controller
             $query = $query->where('name', 'LIKE', '%'.$request->category_name.'%');
         }
 
+        // If request_id is set
+        if ($request->has('city')) {
+            $query = $query->whereHas('city', function ($q) use($request){
+               $q->where('id', '=', $request->city);
+            });
+        }
+
         if ($request->has('page')) {
             $perPage = 5;
             if ($request->has('perPage')) {
