@@ -19,11 +19,15 @@ Route::middleware('auth:api')->group(function() {
         return $request->user();
     });
 
-    Route::apiResources([
-        'cities' => 'API\CityController',
-        'categories' => 'API\CategoryController',
-        'restaurants' => 'API\RestaurantController',
-        'menus' => 'API\MenuController',
-        'items' => 'API\ItemController'
-    ]);
+    Route::resource('cities', 'API\CityController')->except(['index']);
+    Route::resource('categories', 'API\CategoryController')->except(['index']);
+    Route::resource('restaurants', 'API\RestaurantController')->except(['index']);
+    Route::resource('menus', 'API\MenuController')->except(['index']);
+    Route::resource('items', 'API\ItemController')->except(['index']);
 });
+
+Route::resource('cities', 'API\CityController')->only(['index']);
+Route::resource('categories', 'API\CategoryController')->only(['index']);
+Route::resource('restaurants', 'API\RestaurantController')->only(['index']);
+Route::resource('menus', 'API\MenuController')->only(['index']);
+Route::resource('items', 'API\ItemController')->only(['index']);
