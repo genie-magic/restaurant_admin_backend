@@ -15,4 +15,12 @@ class Menu extends Model
     public function items() {
         return $this->hasMany(Item::class);
     }
+
+    public static function boot(){
+        parent::boot();
+
+        static::deleting(function ($menu) {
+           $menu->items()->delete();
+        });
+    }
 }

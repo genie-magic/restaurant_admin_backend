@@ -20,6 +20,9 @@ class CreateItemsTable extends Migration
             $table->unsignedInteger('price');
             $table->unsignedInteger('menu_id');
             $table->timestamps();
+            $table->foreign('menu_id')
+                ->references('id')->on('menus')
+                ->onDelete('cascade');
         });
     }
 

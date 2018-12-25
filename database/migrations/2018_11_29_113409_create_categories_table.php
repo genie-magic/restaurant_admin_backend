@@ -19,6 +19,9 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             $table->string('image_url')->nullable();
             $table->timestamps();
+            $table->foreign('city_id')
+                ->references('id')->on('cities')
+                ->onDelete('cascade');
         });
     }
 

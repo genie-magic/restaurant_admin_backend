@@ -16,7 +16,11 @@ class CreateCategoryRestaurantTable extends Migration
         Schema::create('category_restaurant', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('category_id')->unsigned();
+            $table->foreign('category_id')->references('id')
+                ->on('categories')->onDelete('cascade');
             $table->integer('restaurant_id')->unsigned();
+            $table->foreign('restaurant_id')->references('id')
+                ->on('restaurants')->onDelete('cascade');
             $table->timestamps();
         });
     }

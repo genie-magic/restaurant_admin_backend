@@ -17,4 +17,12 @@ class Restaurant extends Model
     {
         return $this->hasMany(Menu::class);
     }
+
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($restaurant) {
+            $restaurant->menus()->delete();
+        });
+    }
 }
