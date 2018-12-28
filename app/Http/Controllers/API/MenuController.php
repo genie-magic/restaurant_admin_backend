@@ -24,21 +24,24 @@ class MenuController extends Controller
 
         $query = Menu::query();
 
-        // if 'menu name' search is set
-        if ($request->has('menu_name') && $request->has('item_name')) {
-            $query = $query->orWhere('name', 'LIKE', '%'.$request->menu_name.'%');
-            $query = $query->orWhereHas('items', function($q) use ($request) {
-               $q->where('items.name', 'LIKE', '%'.$request->item_name.'%');
-            });
-        } else if ($request->has('menu_name')) {
-            $query = $query->where('name', 'LIKE', '%'.$request->menu_name.'%');
-        }
-
         // If 'restaurant' search required
         if ($request->has('restaurant')) {
             $query = $query->whereHas('restaurant', function($q) use($request) {
                 $q->where('id', '=', $request->restaurant);
             });
+        }
+
+        // if 'menu name' search is set
+        if ($request->has('menu_name') && $request->has('item_name')) {
+            $query = $query->where(function ($rquery) use ($request) {
+                $rquery = $rquery->orWhere('name', 'LIKE', '%'.$request->menu_name.'%');
+                $rquery = $rquery->orWhereHas('items', function($q) use ($request) {
+                    $q->where('items.name', 'LIKE', '%'.$request->item_name.'%');
+                });
+            });
+
+        } else if ($request->has('menu_name')) {
+            $query = $query->where('name', 'LIKE', '%'.$request->menu_name.'%');
         }
 
         if ($request->has('page')) {
