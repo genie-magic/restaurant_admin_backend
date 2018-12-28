@@ -25,7 +25,12 @@ class MenuController extends Controller
         $query = Menu::query();
 
         // if 'menu name' search is set
-        if ($request->has('menu_name')) {
+        if ($request->has('menu_name') && $request->has('item_name')) {
+            $query = $query->orWhere('name', 'LIKE', '%'.$request->menu_name.'%');
+            $query = $query->orWhereHas('items', function($q) use ($request) {
+               $q->where('items.name', 'LIKE', '%'.$request->item_name.'%');
+            });
+        } else if ($request->has('menu_name')) {
             $query = $query->where('name', 'LIKE', '%'.$request->menu_name.'%');
         }
 
