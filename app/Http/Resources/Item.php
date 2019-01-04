@@ -21,6 +21,7 @@ class Item extends JsonResource
             'name' => $this->name,
             'menu' => new MenuResource(Menu::find($this->menu_id)),
             'image_url' => $this->image_url,
+            'order' => $this->order,
             'price' => $this->price,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

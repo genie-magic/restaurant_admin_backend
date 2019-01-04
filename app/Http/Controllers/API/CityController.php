@@ -28,6 +28,9 @@ class CityController extends Controller
             $query = $query->where('name', 'LIKE', '%'.$request->city_name.'%');
         }
 
+        // Order by 'order' field
+        $query = $query->orderBy('order');
+
         if ($request->has('page')) {
             $perPage = 5;
             if ($request->has('perPage')) {
@@ -49,7 +52,8 @@ class CityController extends Controller
     {
 
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'order' => 'integer|required'
         ]);
 
         // If file is set then validate file name and file type
@@ -81,7 +85,8 @@ class CityController extends Controller
 
         $city = City::create([
             'name' => $request->name,
-            'image_url' => $image_url
+            'image_url' => $image_url,
+            'order' => $request->order
         ]);
 
         return new CityResource($city);
@@ -108,7 +113,8 @@ class CityController extends Controller
     public function update(Request $request, City $city)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'order' => 'integer|required'
         ]);
 
         // If file is set then validate file name and file type
@@ -137,11 +143,13 @@ class CityController extends Controller
             }
             $city->update([
                 'name' => $request->name,
-                'image_url' => $image_url
+                'image_url' => $image_url,
+                'order' => $request->order
             ]);
         } else {
             $city->update([
                 'name' => $request->name,
+                'order' => $request->order
             ]);
         }
 

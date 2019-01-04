@@ -18,6 +18,7 @@ class Restaurant extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image_url' => $this->image_url,
+            'order' => $this->order,
             'categories' => CategoryResource::collection($this->categories),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at

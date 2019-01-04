@@ -37,6 +37,9 @@ class ItemController extends Controller
             });
         }
 
+        // Order by 'order'
+        $query = $query->orderBy('order');
+        
         if ($request->has('page')) {
             $perPage = 5;
             if ($request->has('perPage')) {
@@ -59,7 +62,8 @@ class ItemController extends Controller
         $request->validate([
             'name' => 'required',
             'price' => 'required|integer',
-            'menu_id' => 'required'
+            'menu_id' => 'required',
+            'order' => 'required|integer'
         ]);
 
         // If file is set then validate file name and file type
@@ -97,6 +101,7 @@ class ItemController extends Controller
 
         $item = Item::create([
             'name' => $request->name,
+            'order' => $request->order,
             'price' => $request->price,
             'image_url' => $image_url,
             'menu_id' => $request->menu_id
@@ -128,7 +133,8 @@ class ItemController extends Controller
         $request->validate([
             'name' => 'required',
             'price' => 'required|integer',
-            'menu_id' => 'required'
+            'menu_id' => 'required',
+            'order' => 'required|integer'
         ]);
 
         if ($request->filled('file')) {
@@ -157,13 +163,15 @@ class ItemController extends Controller
                 'name' => $request->name,
                 'price' => $request->price,
                 'image_url' => $image_url,
-                'menu_id' => $request->menu_id
+                'menu_id' => $request->menu_id,
+                'order' => $request->order
             ]);
         } else {
             $item->update([
                 'name' => $request->name,
                 'price' => $request->price,
-                'menu_id' => $request->menu_id
+                'menu_id' => $request->menu_id,
+                'order' => $request->order
             ]);
         }
 

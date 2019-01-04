@@ -19,7 +19,7 @@ class MenuController extends Controller
     {
         $request->validate([
             'perPage' => 'integer',
-            'restaurant' => 'integer'
+            'restaurant' => 'integer',
         ]);
 
         $query = Menu::query();
@@ -44,6 +44,9 @@ class MenuController extends Controller
             $query = $query->where('name', 'LIKE', '%'.$request->menu_name.'%');
         }
 
+        // Order by 'order'
+        $query = $query->orderBy('order');
+
         if ($request->has('page')) {
             $perPage = 5;
             if ($request->has('perPage')) {
@@ -65,7 +68,8 @@ class MenuController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'restaurant_id' => 'required'
+            'restaurant_id' => 'required',
+            'order' => 'integer|required'
         ]);
 
 
@@ -100,6 +104,7 @@ class MenuController extends Controller
         $menu = Menu::create([
             'name' => $request->name,
             'restaurant_id' => $request->restaurant_id,
+            'order' => $request->order,
             'image_url' => $image_url
         ]);
 
@@ -128,7 +133,8 @@ class MenuController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'restaurant_id' => 'required'
+            'restaurant_id' => 'required',
+            'order' => 'integer|required'
         ]);
 
         // If file is set then validate file name and file type
@@ -157,12 +163,14 @@ class MenuController extends Controller
             $menu->update([
                 'name' => $request->name,
                 'restaurant_id' => $request->restaurant_id,
-                'image_url' => $image_url
+                'image_url' => $image_url,
+                'order' => $request->order
             ]);
         } else {
             $menu->update([
                 'name' => $request->name,
-                'restaurant_id' => $request->restaurant_id
+                'restaurant_id' => $request->restaurant_id,
+                'order' => $request->order
             ]);
         }
 

@@ -44,6 +44,9 @@ class RestaurantController extends Controller
             });
         }
 
+        // Order by 'order'
+        $query = $query->orderBy('order');
+
         if ($request->has('page')) {
             $perPage = 5;
             if ($request->has('perPage')) {
@@ -64,7 +67,8 @@ class RestaurantController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'order' => 'integer|required'
         ]);
 
         // If file is set then validate file name and file type
@@ -96,7 +100,8 @@ class RestaurantController extends Controller
 
         $restaurant = Restaurant::create([
             'name' => $request->name,
-            'image_url' => $image_url
+            'image_url' => $image_url,
+            'order' => $request->order
         ]);
 
         if($request->has('category')) {
@@ -152,11 +157,13 @@ class RestaurantController extends Controller
             }
             $restaurant->update([
                 'name' => $request->name,
-                'image_url' => $image_url
+                'image_url' => $image_url,
+                'order' => $request->order
             ]);
         } else {
             $restaurant->update([
-                'name' => $request->name
+                'name' => $request->name,
+                'order' => $request->order
             ]);
         }
 
@@ -165,7 +172,6 @@ class RestaurantController extends Controller
         }
 
         return new RestaurantResource($restaurant);
-
     }
 
     /**

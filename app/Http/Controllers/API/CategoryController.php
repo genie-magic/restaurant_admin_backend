@@ -36,6 +36,9 @@ class CategoryController extends Controller
             });
         }
 
+        // Order by 'order'
+        $query = $query->orderBy('order');
+
         if ($request->has('page')) {
             $perPage = 5;
             if ($request->has('perPage')) {
@@ -58,7 +61,8 @@ class CategoryController extends Controller
 
         $request->validate([
             'name' => 'required',
-            'city_id' => 'required'
+            'city_id' => 'required',
+            'order' => 'integer|required'
         ]);
 
         // If file is set then validate file name and file type
@@ -91,7 +95,8 @@ class CategoryController extends Controller
         $category = Category::create([
             'name' => $request->name,
             'city_id' => $request->city_id,
-            'image_url' => $image_url
+            'image_url' => $image_url,
+            'order' => $request->order
         ]);
 
         return new CategoryResource($category);
@@ -117,7 +122,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-
+        $request->validate([
+            'name' => 'required',
+            'city_id' => 'required',
+            'order' => 'integer|required'
+        ]);
 
         // If file is set then validate file name and file type
         if ($request->filled('file')){
@@ -148,10 +157,11 @@ class CategoryController extends Controller
             $category->update([
                 'name' => $request->name,
                 'city_id' => $request->city_id,
-                'image_url' => $image_url
+                'image_url' => $image_url,
+                'order' => $request->order
             ]);
         } else {
-            $category->update($request->only(['name', 'city_id']));
+            $category->update($request->only(['name', 'city_id', 'order']));
         }
 
 

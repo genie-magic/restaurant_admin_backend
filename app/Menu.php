@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
-    protected $fillable = ['name', 'restaurant_id', 'menu_id', 'image_url'];
+    protected $fillable = ['name', 'restaurant_id', 'menu_id', 'image_url', 'order'];
 
     public function restaurant() {
         return $this->belongsTo(Restaurant::class);

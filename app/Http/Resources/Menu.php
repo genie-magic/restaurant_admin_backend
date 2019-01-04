@@ -21,6 +21,7 @@ class Menu extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'order' => $this->order,
             'restaurant' => new RestaurantResource(Restaurant::find($this->restaurant_id)),
             'items' => $this->items,
             'image_url' => $this->image_url,

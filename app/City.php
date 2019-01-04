@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
-    protected $fillable = ['name', 'image_url'];
+    protected $fillable = ['name', 'image_url', 'order'];
 
     public function categories() {
         return $this->hasMany(Category::class);
