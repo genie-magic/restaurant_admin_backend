@@ -101,7 +101,8 @@ class RestaurantController extends Controller
         $restaurant = Restaurant::create([
             'name' => $request->name,
             'image_url' => $image_url,
-            'order' => $request->order
+            'order' => $request->order,
+            'is_open' => $request->is_open
         ]);
 
         if($request->has('category')) {
@@ -158,12 +159,14 @@ class RestaurantController extends Controller
             $restaurant->update([
                 'name' => $request->name,
                 'image_url' => $image_url,
-                'order' => $request->order
+                'order' => $request->order,
+                'is_open' => $request->is_open
             ]);
         } else {
             $restaurant->update([
                 'name' => $request->name,
-                'order' => $request->order
+                'order' => $request->order,
+                'is_open' => $request->is_open
             ]);
         }
 
