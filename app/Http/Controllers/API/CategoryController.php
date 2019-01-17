@@ -96,7 +96,8 @@ class CategoryController extends Controller
             'name' => $request->name,
             'city_id' => $request->city_id,
             'image_url' => $image_url,
-            'order' => $request->order
+            'order' => $request->order,
+            'is_open' => $request->is_open
         ]);
 
         return new CategoryResource($category);
@@ -137,7 +138,7 @@ class CategoryController extends Controller
         }
 
 
-        if($request->has('file')) {
+        if($request->filled('file')) {
             $image_url = null;
 
             // Get file name with extensions
@@ -158,12 +159,12 @@ class CategoryController extends Controller
                 'name' => $request->name,
                 'city_id' => $request->city_id,
                 'image_url' => $image_url,
-                'order' => $request->order
+                'order' => $request->order,
+                'is_open' => $request->is_open
             ]);
         } else {
-            $category->update($request->only(['name', 'city_id', 'order']));
+            $category->update($request->only(['name', 'city_id', 'order', 'is_open']));
         }
-
 
         return new CategoryResource($category);
     }
