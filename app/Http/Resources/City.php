@@ -19,6 +19,7 @@ class City extends JsonResource
             'name' => $this->name,
             'order' => $this->order,
             'image_url' => $this->image_url,
+            'is_open' => $this->is_open,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

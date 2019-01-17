@@ -86,7 +86,8 @@ class CityController extends Controller
         $city = City::create([
             'name' => $request->name,
             'image_url' => $image_url,
-            'order' => $request->order
+            'order' => $request->order,
+            'is_open' => $request->is_open
         ]);
 
         return new CityResource($city);
@@ -125,8 +126,7 @@ class CityController extends Controller
             ]);
         }
 
-
-        if($request->has('file')) {
+        if($request->filled('file')) {
             $image_url = null;
             $file = $request->file;
             if (preg_match('/^data:image\/(\w+);base64,/', $file)) {
@@ -144,12 +144,14 @@ class CityController extends Controller
             $city->update([
                 'name' => $request->name,
                 'image_url' => $image_url,
-                'order' => $request->order
+                'order' => $request->order,
+                'is_open' => $request->is_open
             ]);
         } else {
             $city->update([
                 'name' => $request->name,
-                'order' => $request->order
+                'order' => $request->order,
+                'is_open' => $request->is_open
             ]);
         }
 
