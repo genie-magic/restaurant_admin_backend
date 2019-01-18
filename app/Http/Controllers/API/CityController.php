@@ -28,6 +28,11 @@ class CityController extends Controller
             $query = $query->where('name', 'LIKE', '%'.$request->city_name.'%');
         }
 
+        // If "is_open" filter is set
+        if ($request->has('is_open')) {
+            $query = $query->where('is_open', '=', $request->is_open);
+        }
+
         // Order by 'order' field
         $query = $query->orderBy('order');
 

@@ -29,6 +29,11 @@ class CategoryController extends Controller
             $query = $query->where('name', 'LIKE', '%'.$request->category_name.'%');
         }
 
+        // If "is_open" filter is set
+        if ($request->has('is_open')) {
+            $query = $query->where('is_open', '=', $request->is_open);
+        }
+
         // If request_id is set
         if ($request->has('city')) {
             $query = $query->whereHas('city', function ($q) use($request){

@@ -30,6 +30,11 @@ class RestaurantController extends Controller
             $query = $query->where('name', 'LIKE', '%'.$request->restaurant_name.'%');
         }
 
+        // If "is_open" filter is set
+        if ($request->has('is_open')) {
+            $query = $query->where('is_open', '=', $request->is_open);
+        }
+
         // If city query is selected
         if ($request->has('city')) {
             $query = $query->whereHas('categories.city', function($q) use($request){
