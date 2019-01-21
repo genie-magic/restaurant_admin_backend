@@ -145,7 +145,7 @@ class MenuController extends Controller
             ]);
         }
 
-        if($request->has('file')) {
+        if($request->filled('file')) {
             $image_url = null;
             $file = $request->file;
             if (preg_match('/^data:image\/(\w+);base64,/', $file)) {
