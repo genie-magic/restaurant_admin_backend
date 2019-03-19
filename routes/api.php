@@ -24,6 +24,7 @@ Route::middleware('auth:api')->group(function() {
     Route::resource('restaurants', 'API\RestaurantController')->except(['index']);
     Route::resource('menus', 'API\MenuController')->except(['index']);
     Route::resource('items', 'API\ItemController')->except(['index']);
+    Route::post('/cities/insertmany', 'API\CityController@insertMany');
 });
 
 Route::resource('cities', 'API\CityController')->only(['index']);

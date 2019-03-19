@@ -175,4 +175,10 @@ class CityController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function insertMany(Request $request) {
+        $data = $request->data;
+        City::insert($data);
+        return response()->json("City data array inserted successfully!", 200);
+    }
 }
